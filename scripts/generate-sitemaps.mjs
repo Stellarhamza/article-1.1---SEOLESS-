@@ -80,8 +80,13 @@ function loadBlogs() {
 
 function loadIsleCover() {
   const src = readFileSync(join(dataDir, 'images.ts'), 'utf8')
-  const m = src.match(/"isle":\s*"(https?:[^"]+)"/)
-  return m?.[1] || OG_IMAGE
+  // Prefer explicit ISLE_COVER / ISLE_HERO constants, then legacy "isle": "url" map entries.
+  const fromConst =
+    src.match(/ISLE_COVER\s*=\s*['"](https?:[^'"]+)['"]/) ||
+    src.match(/ISLE_HERO\s*=\s*['"](https?:[^'"]+)['"]/)
+  if (fromConst?.[1]) return fromConst[1]
+  const fromMap = src.match(/["']isle["']\s*:\s*["'](https?:[^'"]+)["']/)
+  return fromMap?.[1] || OG_IMAGE
 }
 
 function loadImageSeo() {
