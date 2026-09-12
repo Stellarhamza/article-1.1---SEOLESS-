@@ -32,7 +32,7 @@ function ignImageProxy(): Plugin {
             : target.includes('igdb.com')
               ? 'https://www.igdb.com/'
               : target.includes('wh-satano.ru')
-                ? 'https://zadeyo.com/'
+                ? 'https://www.google.com/'
                 : 'https://store.steampowered.com/',
         },
       })
@@ -73,5 +73,26 @@ export default defineConfig({
   server: {
     port: 5174,
     strictPort: true,
+  },
+  build: {
+    target: 'es2020',
+    cssCodeSplit: true,
+    sourcemap: false,
+    modulePreload: { polyfill: false },
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) {
+            return 'react'
+          }
+          if (id.includes('node_modules/react-router')) {
+            return 'react'
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'icons'
+          }
+        },
+      },
+    },
   },
 })

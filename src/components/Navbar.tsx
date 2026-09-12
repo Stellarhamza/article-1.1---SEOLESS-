@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { LogoMark } from './LogoMark'
-import { ZADEYO_URL } from '../data/links'
+import { CheckoutLink } from './CheckoutLink'
+import { SITE_NAME } from '../data/site'
 
 const NAV_LINKS = [
   { label: 'Home', to: '/' },
-  { label: 'Articles', to: '/articles' },
+  { label: 'Blogs', to: '/articles' },
   { label: 'Reviews', to: '/reviews' },
+  { label: 'FAQ', to: '/faq' },
+  { label: 'Support', to: '/support' },
 ] as const
 
 type NavbarProps = {
@@ -32,7 +35,7 @@ export function Navbar({ onVideo: _onVideo = false }: NavbarProps) {
         <Link to="/" className="flex min-w-0 items-center gap-2">
           <LogoMark className={`${brandClass} shrink-0`} />
           <span className={`truncate text-base font-semibold sm:text-lg ${brandClass}`}>
-            Gaming Briefs
+            {SITE_NAME}
           </span>
         </Link>
 
@@ -48,14 +51,9 @@ export function Navbar({ onVideo: _onVideo = false }: NavbarProps) {
               </Link>
             ))}
           </div>
-          <a
-            href={ZADEYO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="cta-gradient flex items-center self-stretch rounded-full px-5 text-sm font-medium text-white transition-opacity"
-          >
+          <CheckoutLink className="cta-gradient flex items-center self-stretch rounded-full px-5 text-sm font-medium text-white transition-opacity hover:opacity-90">
             Get
-          </a>
+          </CheckoutLink>
         </div>
 
         <button
@@ -106,15 +104,12 @@ export function Navbar({ onVideo: _onVideo = false }: NavbarProps) {
           ))}
         </div>
         <div className="mt-auto px-6 pb-[max(2.5rem,env(safe-area-inset-bottom))]">
-          <a
-            href={ZADEYO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <CheckoutLink
             onClick={() => setMenuOpen(false)}
             className="cta-gradient block w-full rounded-full px-6 py-3 text-center text-sm font-medium text-white"
           >
             Get
-          </a>
+          </CheckoutLink>
         </div>
       </div>
     </>

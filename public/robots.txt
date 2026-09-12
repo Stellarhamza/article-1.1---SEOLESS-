@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gamingbriefs.com/sitemap.xml
-Sitemap: https://gamingbriefs.com/sitemap-products.xml
-Sitemap: https://gamingbriefs.com/sitemap-images.xml
+Sitemap: https://theislecheats.cc/sitemap.xml

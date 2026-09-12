@@ -1,0 +1,222 @@
+import { useMemo } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { Navbar } from '../components/Navbar'
+import { SiteFooter } from '../components/SiteFooter'
+import { BLOGS, blogPath, getBlog } from '../data/blogs'
+import { guidePath } from '../data/games'
+import { getGameImage, IMAGE_SEO } from '../data/images'
+import { CheckoutLink } from '../components/CheckoutLink'
+import { SITE_HOST, SITE_NAME, SITE_URL } from '../data/site'
+import { usePageSeo } from '../lib/seo'
+import { NotFoundPage } from './NotFoundPage'
+
+export function BlogPostPage() {
+  const { slug = '' } = useParams()
+  const post = getBlog(slug)
+
+  const seo = useMemo(() => {
+    if (!post) {
+      return {
+        title: `Post Not Found | ${SITE_NAME}`,
+        description: `This The Isle Cheats blog post was not found on ${SITE_HOST}.`,
+        path: '/articles',
+        keywords: 'The Isle Cheats, the isle cheats blogs',
+      }
+    }
+    return {
+      title: post.metaTitle,
+      description: post.metaDescription,
+      path: blogPath(post.slug),
+      keywords: post.keywords,
+      ogType: 'article' as const,
+      image: getGameImage('isle'),
+      robots: 'index, follow, max-image-preview:large, max-snippet:-1',
+    }
+  }, [post])
+
+  const jsonLd = useMemo(() => {
+    if (!post) return undefined
+    return {
+      '@type': 'BlogPosting',
+      headline: post.title,
+      description: post.metaDescription,
+      datePublished: post.date,
+      dateModified: post.date,
+      author: { '@type': 'Organization', name: SITE_NAME },
+      publisher: {
+        '@type': 'Organization',
+        name: SITE_NAME,
+        url: SITE_URL,
+        logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
+      },
+      mainEntityOfPage: `${SITE_URL}${blogPath(post.slug)}`,
+      keywords: post.keywords,
+      image: getGameImage('isle'),
+      inLanguage: ['en', 'en-US', 'en-GB', 'en-AU', 'en-CA'],
+      articleSection: post.tag,
+    }
+  }, [post])
+
+  usePageSeo(seo, jsonLd)
+
+  if (!post) return <NotFoundPage />
+
+  const related = BLOGS.filter((b) => b.slug !== post.slug).slice(0, 6)
+
+  return (
+    <div className="min-h-screen overflow-x-hidden bg-[#0e0e0e] text-white">
+      <div className="border-b border-white/10 bg-[#0e0e0e]/90 backdrop-blur-xl">
+        <Navbar />
+      </div>
+
+      <main className="page-body">
+        <article className="page-x py-10 sm:py-14">
+          <div className="mx-auto max-w-3xl">
+            <nav
+              className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-white/40"
+              aria-label="Breadcrumb"
+            >
+              <Link to="/" className="hover:text-white/70">
+                Home
+              </Link>
+              <span>/</span>
+              <Link to="/articles" className="hover:text-white/70">
+                Blogs
+              </Link>
+              <span>/</span>
+              <span className="text-white/70">{post.tag}</span>
+            </nav>
+
+            <p className="mt-6 text-xs font-medium uppercase tracking-[0.2em] text-white/45">
+              {post.tag} · {post.readMinutes} min read · {post.date}
+            </p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
+              {post.title}
+            </h1>
+            <p className="mt-4 text-base leading-relaxed text-white/60 sm:text-lg">
+              {post.excerpt}
+            </p>
+
+            <figure className="mt-8 overflow-hidden rounded-2xl border border-white/10">
+              <img
+                src={getGameImage('isle')}
+                alt={`${post.title} — The Isle Cheats IGN image for ${post.keywords.split(',')[0].trim()}`}
+                title={IMAGE_SEO.isle?.title ?? 'The Isle Cheats'}
+                width={800}
+                height={1200}
+                loading="eager"
+                decoding="async"
+                referrerPolicy="no-referrer"
+                className="game-cover-img aspect-[3/4] w-full object-cover object-center sm:aspect-[16/10]"
+              />
+              <figcaption className="border-t border-white/10 px-4 py-3 text-xs text-white/45">
+                {IMAGE_SEO.isle?.caption ?? 'The Isle Cheats — Evrima'}
+              </figcaption>
+            </figure>
+
+            <div className="mt-10 space-y-10">
+              {post.sections.map((section) => (
+                <section key={section.heading}>
+                  <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+                    {section.heading}
+                  </h2>
+                  <div className="mt-3 space-y-3 text-sm leading-relaxed text-white/55 sm:text-base">
+                    {section.body.map((para) => (
+                      <p key={para.slice(0, 48)}>{para}</p>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+
+            <div className="page-card mt-12 rounded-2xl p-6 sm:p-8">
+              <h2 className="text-lg font-semibold text-white">
+                Ready for The Isle Cheats?
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-white/55">
+                Check live Undetected status, then buy ESP, wallhack, and spoofer for
+                Evrima on {SITE_HOST}. Need help? Read{' '}
+                <Link to="/support" className="text-white/80 underline-offset-2 hover:underline">
+                  The Isle Cheats support
+                </Link>
+                {' '}or{' '}
+                <Link to="/reviews" className="text-white/80 underline-offset-2 hover:underline">
+                  player reviews
+                </Link>
+                . Own the game via{' '}
+                <a
+                  href="https://store.steampowered.com/app/376210/The_Isle/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/80 underline-offset-2 hover:underline"
+                >
+                  Steam
+                </a>
+                .
+              </p>
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Link
+                  to={guidePath('isle')}
+                  className="inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white hover:bg-white/5"
+                >
+                  Open product
+                </Link>
+                <Link
+                  to="/support"
+                  className="inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white hover:bg-white/5"
+                >
+                  Support
+                </Link>
+                <CheckoutLink className="cta-gradient inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium text-white">
+                  Buy The Isle Cheats
+                </CheckoutLink>
+              </div>
+            </div>
+
+            <Link
+              to="/articles"
+              className="mt-10 inline-flex items-center gap-1.5 text-sm text-white/55 hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4" strokeWidth={1.75} />
+              All The Isle blogs
+            </Link>
+          </div>
+        </article>
+
+        {related.length > 0 ? (
+          <section className="page-band page-x border-t border-white/10 py-12 sm:py-16">
+            <div className="mx-auto max-w-6xl">
+              <h2 className="text-xl font-semibold tracking-tight text-white">
+                More The Isle Cheats blogs
+              </h2>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {related.map((b) => (
+                  <Link
+                    key={b.slug}
+                    to={blogPath(b.slug)}
+                    className="page-card group flex h-full flex-col rounded-2xl p-5"
+                  >
+                    <p className="text-xs uppercase tracking-wider text-white/40">{b.tag}</p>
+                    <h3 className="mt-2 text-sm font-semibold text-white group-hover:text-white/85">
+                      {b.title}
+                    </h3>
+                    <p className="mt-2 flex-1 text-xs leading-relaxed text-white/50">
+                      {b.excerpt}
+                    </p>
+                    <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-white/70">
+                      Read
+                      <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        <SiteFooter />
+      </main>
+    </div>
+  )
+}

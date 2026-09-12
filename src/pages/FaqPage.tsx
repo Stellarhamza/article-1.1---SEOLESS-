@@ -1,0 +1,121 @@
+import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
+import { Navbar } from '../components/Navbar'
+import { SiteFooter } from '../components/SiteFooter'
+import { FaqSection, faqPageJsonLd } from '../components/FaqSection'
+import { SITE_FAQS } from '../data/faqs'
+import { guidePath } from '../data/games'
+import { OFFICIAL_ISLE_LINKS } from '../data/links'
+import { CheckoutLink } from '../components/CheckoutLink'
+import { SEO, SITE_HOST, SITE_NAME, SITE_URL } from '../data/site'
+import { usePageSeo } from '../lib/seo'
+
+export function FaqPage() {
+  const jsonLd = useMemo(
+    () => ({
+      '@context': 'https://schema.org',
+      '@graph': [
+        faqPageJsonLd(SITE_FAQS, `${SITE_URL}/faq`),
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: 'FAQ',
+              item: `${SITE_URL}/faq`,
+            },
+          ],
+        },
+      ],
+    }),
+    [],
+  )
+
+  usePageSeo(SEO.faq, jsonLd)
+
+  return (
+    <div className="min-h-screen overflow-x-hidden bg-[#0e0e0e] text-white">
+      <div className="border-b border-white/10 bg-[#0e0e0e]/90 backdrop-blur-xl">
+        <Navbar />
+      </div>
+
+      <main className="page-body">
+        <section className="page-x pt-12 sm:pt-20">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-white/45">
+              {SITE_NAME} · FAQ · {SITE_HOST}
+            </p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
+              The Isle Cheats FAQ
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/55">
+              Frequently asked questions about The Isle Cheats for Evrima — Undetected status,
+              ESP, wallhack, radar, HWID spoofer, how to buy, how to load, support, and reviews.
+              Answers below are visible on the page for readers and search engines.
+            </p>
+            <p className="mt-3 text-sm text-white/45">
+              Related:{' '}
+              <Link to={guidePath('isle')} className="text-white/75 underline-offset-2 hover:underline">
+                Buy The Isle Cheats
+              </Link>
+              {' · '}
+              <Link to="/support" className="text-white/75 underline-offset-2 hover:underline">
+                Support
+              </Link>
+              {' · '}
+              <Link to="/reviews" className="text-white/75 underline-offset-2 hover:underline">
+                Reviews
+              </Link>
+              {' · '}
+              <a
+                href={OFFICIAL_ISLE_LINKS[1].href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/75 underline-offset-2 hover:underline"
+              >
+                The Isle on Steam
+              </a>
+            </p>
+          </div>
+        </section>
+
+        <FaqSection
+          id="faq"
+          heading="All The Isle Cheats questions"
+          intro="Straight answers matched in FAQ schema so Google can read the same text you see."
+          items={SITE_FAQS}
+          className="border-t-0 pt-10 sm:pt-12"
+        />
+
+        <section className="page-band page-x border-t border-white/10 py-16">
+          <div className="page-card mx-auto grid max-w-6xl gap-6 overflow-hidden rounded-2xl p-6 sm:rounded-3xl sm:p-10 lg:grid-cols-2 lg:items-center lg:p-12">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight text-white">
+                Still need help?
+              </h2>
+              <p className="mt-3 text-sm text-white/55">
+                Open support for load and inject help, or buy when Undetected status is live.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+              <Link
+                to="/support"
+                className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white hover:bg-white/5"
+              >
+                Support
+              </Link>
+              <CheckoutLink className="cta-gradient inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white">
+                Buy The Isle Cheats
+              </CheckoutLink>
+            </div>
+          </div>
+        </section>
+
+        <SiteFooter />
+      </main>
+    </div>
+  )
+}
+

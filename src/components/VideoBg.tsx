@@ -48,7 +48,7 @@ export function VideoBg() {
     }
 
     const onTimeUpdate = () => {
-      // Keep loop away from the first 5s (looks like a still/poster)
+      // Keep loop away from the skipped intro
       if (video.currentTime > 0 && video.currentTime < START_AT) {
         video.currentTime = START_AT
         return
@@ -91,11 +91,10 @@ export function VideoBg() {
         }`}
         src={HERO_VIDEO}
         muted
-        defaultMuted
         playsInline
         autoPlay
         loop
-        preload="auto"
+        preload="metadata"
         controls={false}
         disablePictureInPicture
         disableRemotePlayback

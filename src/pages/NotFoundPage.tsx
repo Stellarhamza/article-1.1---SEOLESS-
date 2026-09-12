@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Navbar } from '../components/Navbar'
 import { SiteFooter } from '../components/SiteFooter'
 import { HeroSearch } from '../components/HeroSearch'
-import { ZADEYO_URL } from '../data/links'
+import { CheckoutLink } from '../components/CheckoutLink'
 
 export function NotFoundPage() {
   return (
@@ -47,14 +47,9 @@ export function NotFoundPage() {
               >
                 All articles
               </Link>
-              <a
-                href={ZADEYO_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cta-gradient inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white"
-              >
+              <CheckoutLink className="cta-gradient inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white">
                 Get
-              </a>
+              </CheckoutLink>
             </div>
           </div>
         </section>

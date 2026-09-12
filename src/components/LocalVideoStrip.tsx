@@ -105,7 +105,7 @@ export function LocalVideoStrip({
         playsInline
         autoPlay
         loop
-        preload="auto"
+        preload="metadata"
         controls={false}
         disablePictureInPicture
         disableRemotePlayback

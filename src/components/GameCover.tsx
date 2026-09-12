@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { getGameImage, getProductHeroImage } from '../data/images'
+import { getGameImage, getImageAlt, getImageTitle, getProductHeroImage } from '../data/images'
 
 type GameCoverProps = {
   slug: string
@@ -8,7 +8,7 @@ type GameCoverProps = {
   aspect?: 'video' | 'square' | 'hero'
   /** Fill parent (parent must set size / aspect) */
   fill?: boolean
-  /** Product page: use Zadeyo interior and show full color */
+  /** Product page: use interior art and show full color */
   variant?: 'catalog' | 'product'
 }
 
@@ -74,7 +74,8 @@ export function GameCover({
         <img
           key={src}
           src={src}
-          alt={`${name} cover`}
+          alt={getImageAlt(slug, name, variant)}
+          title={getImageTitle(slug, name, variant)}
           loading="lazy"
           decoding="async"
           referrerPolicy="no-referrer"

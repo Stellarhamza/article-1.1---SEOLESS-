@@ -191,7 +191,7 @@ export const IGN_IMAGES: Record<string, string> = {
   "wows": "https://cdn.cloudflare.steamstatic.com/steam/apps/552990/library_600x900.jpg",
   "8-ball-pool": "https://cdn.cloudflare.steamstatic.com/steam/apps/1665460/library_600x900.jpg",
   "insurge": "https://cdn.cloudflare.steamstatic.com/steam/apps/581320/library_600x900.jpg",
-  "isle": "https://cdn.cloudflare.steamstatic.com/steam/apps/376210/library_600x900.jpg",
+  "isle": "https://assets-prd.ignimgs.com/2023/09/12/library-600x900-1694540297721.jpg?width=800&format=jpg&auto=webp&quality=80",
   "wunthering": "https://assets-prd.ignimgs.com/2024/11/20/wutheringwaves-1732060928478.jpg",
   "realm": "https://cdn.cloudflare.steamstatic.com/steam/apps/813820/library_600x900.jpg",
   "starship": "https://cdn.cloudflare.steamstatic.com/steam/apps/1766200/library_600x900.jpg",
@@ -213,11 +213,40 @@ export const IGN_IMAGES: Record<string, string> = {
 
 const FALLBACK = IGN_IMAGES.valorant || Object.values(IGN_IMAGES)[0]
 
+/** Keyworded image SEO for The Isle Cheats (IGN assets). */
+export const IMAGE_SEO: Record<
+  string,
+  { alt: string; title: string; caption: string; heroAlt: string; heroTitle: string; heroCaption: string }
+> = {
+  isle: {
+    alt: 'The Isle Cheats cover art — The Isle Evrima ESP and wallhack guide',
+    title: 'The Isle Cheats | Undetected Evrima Cover',
+    caption: 'The Isle Cheats IGN cover for theisle cheats, isle ESP, and isle wallhack on Evrima',
+    heroAlt: 'The Isle Cheats hero — buy undetected The Isle ESP wallhack and spoofer for Evrima',
+    heroTitle: 'Buy The Isle Cheats | Evrima ESP & Wallhack',
+    heroCaption: 'The Isle Cheats product hero image — undetected ESP, wallhack, radar, HWID spoofer',
+  },
+}
+
 export function getGameImage(slug: string): string {
   return IGN_IMAGES[slug] || FALLBACK
 }
 
-/** Product page hero: Zadeyo interior when synced, else IGN/Steam cover. */
+/** Product page hero: interior when set, else IGN/Steam cover. */
 export function getProductHeroImage(slug: string): string {
   return PRODUCT_INTERIOR_META[slug]?.url || getGameImage(slug)
+}
+
+export function getImageAlt(slug: string, name: string, variant: 'catalog' | 'product' = 'catalog'): string {
+  const seo = IMAGE_SEO[slug]
+  if (seo) return variant === 'product' ? seo.heroAlt : seo.alt
+  return variant === 'product'
+    ? `${name} Cheats — ESP, wallhack and features`
+    : `${name} Cheats cover`
+}
+
+export function getImageTitle(slug: string, name: string, variant: 'catalog' | 'product' = 'catalog'): string {
+  const seo = IMAGE_SEO[slug]
+  if (seo) return variant === 'product' ? seo.heroTitle : seo.title
+  return `${name} Cheats`
 }
