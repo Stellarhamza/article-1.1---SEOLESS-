@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { BlogPostPage } from '../../views/BlogPostPage'
+import { BLOGS, blogPath, getBlog } from '../../data/blogs'
+import { SITE_NAME, SITE_URL, OG_IMAGE, type PageSeo } from '../../data/site'
+import { getGameImage } from '../../data/images'
+
+export function getStaticPaths() {
+  return BLOGS.map((post) => ({
+    params: { slug: post.slug },
+  }))
+}
+
+const { slug } = Astro.params
+const post = getBlog(slug!)
+
+if (!post) {
+  return Astro.redirect('/404')
+}
+
+const seo: PageSeo = {
+  title: post.metaTitle,
+  description: post.metaDescription,
+  path: blogPath(post.slug),
+  keywords: post.keywords,
+  ogType: 'article',
+  image: getGameImage('isle'),
+  robots: 'index, follow, max-image-preview:large, max-snippet:-1',
+}
+
+const jsonLdExtra = [
+  {
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.metaDescription,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { '@type': 'Organization', name: SITE_NAME },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
+    },
+    mainEntityOfPage: `${SITE_URL}${blogPath(post.slug)}`,
+    keywords: post.keywords,
+    image: getGameImage('isle') || OG_IMAGE,
+    inLanguage: 'en',
+    articleSection: post.tag,
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Blogs', item: `${SITE_URL}/articles` },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title,
+        item: `${SITE_URL}${blogPath(post.slug)}`,
+      },
+    ],
+  },
+]
+---
+
+<BaseLayout seo={seo} jsonLdExtra={jsonLdExtra}>
+  <BlogPostPage client:visible slug={post.slug} />
+</BaseLayout>
+

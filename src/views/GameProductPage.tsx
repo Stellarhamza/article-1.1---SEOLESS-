@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
 import { Check, Shield } from 'lucide-react'
 import { Navbar } from '../components/Navbar'
 import { SiteFooter } from '../components/SiteFooter'
@@ -11,11 +9,9 @@ import {
   parseGuideSlug,
   type Game,
 } from '../data/games'
-import { getGameImage } from '../data/images'
 import { PRODUCT_PAGE_FAQS } from '../data/faqs'
-import { SEO, SITE_HOST, SITE_NAME, SITE_URL } from '../data/site'
-import { usePageSeo } from '../lib/seo'
-import { FaqSection, faqPageJsonLd } from '../components/FaqSection'
+import { SITE_HOST, SITE_NAME } from '../data/site'
+import { FaqSection } from '../components/FaqSection'
 import { CheckoutLink } from '../components/CheckoutLink'
 import { NotFoundPage } from './NotFoundPage'
 import { blogPath } from '../data/blogs'
@@ -48,83 +44,22 @@ function ProductPurchaseCard({ game }: { game: Game }) {
   )
 }
 
-export function GameProductPage() {
-  const { guideSlug = '' } = useParams()
+type GameProductPageProps = {
+  guideSlug: string
+}
+
+export function GameProductPage({ guideSlug }: GameProductPageProps) {
   const slug = parseGuideSlug(guideSlug)
   const game = getGame(slug)
 
-  const jsonLd = useMemo(() => {
-    if (!game) return undefined
-    return {
-      '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'Product',
-          name: 'The Isle Cheats',
-          description: SEO.product.description,
-          brand: { '@type': 'Brand', name: SITE_NAME },
-          url: `${SITE_URL}${SEO.product.path}`,
-          image: getGameImage('isle'),
-          category: 'The Isle Evrima Cheats',
-          about: {
-            '@type': 'VideoGame',
-            name: 'The Isle',
-            alternateName: 'The Isle Evrima',
-          },
-          additionalProperty: [
-            {
-              '@type': 'PropertyValue',
-              name: 'Scope',
-              value: 'The Isle only — no other games',
-            },
-          ],
-          offers: {
-            '@type': 'Offer',
-            url: `${SITE_URL}${SEO.product.path}`,
-            availability: 'https://schema.org/InStock',
-            priceCurrency: 'USD',
-          },
-        },
-        {
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
-            {
-              '@type': 'ListItem',
-              position: 2,
-              name: 'Blogs',
-              item: `${SITE_URL}/articles`,
-            },
-            {
-              '@type': 'ListItem',
-              position: 3,
-              name: 'The Isle Cheats',
-              item: `${SITE_URL}/isle-cheats`,
-            },
-          ],
-        },
-        {
-          ...faqPageJsonLd(PRODUCT_PAGE_FAQS, `${SITE_URL}/isle-cheats`),
-        },
-      ],
-    }
-  }, [game])
-
-  usePageSeo(
-    game
-      ? SEO.product
-      : {
-          title: `Page Not Found | ${SITE_NAME}`,
-          description: `This page was not found on ${SITE_HOST}. Browse The Isle Cheats guides instead.`,
-          path: '/',
-          keywords: 'The Isle Cheats, the isle cheats',
-        },
-    game ? jsonLd : undefined,
-  )
-
   if (!guideSlug.endsWith('-cheats')) {
     const maybe = getGame(guideSlug)
-    if (maybe) return <Navigate to={guidePath(maybe.slug)} replace />
+    if (maybe) {
+      if (typeof window !== 'undefined') {
+        window.location.replace(guidePath(maybe.slug))
+      }
+      return null
+    }
     return <NotFoundPage />
   }
 
@@ -143,20 +78,26 @@ export function GameProductPage() {
               className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-white/40"
               aria-label="Breadcrumb"
             >
-              <Link to="/" className="shrink-0 hover:text-white/70">
+              <a href="/" className="shrink-0 hover:text-white/70">
                 Home
-              </Link>
+              </a>
               <span className="shrink-0">/</span>
-              <Link to="/articles" className="shrink-0 hover:text-white/70">
+              <a href="/articles" className="shrink-0 hover:text-white/70">
                 Blogs
-              </Link>
+              </a>
               <span className="shrink-0">/</span>
               <span className="min-w-0 text-white/70">The Isle Cheats</span>
             </nav>
 
             <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 sm:mt-8">
               <CheckoutLink className="block" aria-label="Buy The Isle Cheats">
-                <GameCover slug={game.slug} name={game.name} aspect="hero" variant="product" />
+                <GameCover
+                  slug={game.slug}
+                  name={game.name}
+                  aspect="hero"
+                  variant="product"
+                  priority
+                />
               </CheckoutLink>
             </div>
 
@@ -247,9 +188,9 @@ export function GameProductPage() {
                     <li>Scan Entity ESP / World ESP / radar / spoofer features.</li>
                     <li>Checkout for instant loader delivery.</li>
                     <li>Read{' '}
-                      <Link to={blogPath('how-to-load')} className="text-white/80 underline-offset-2 hover:underline">
+                      <a href={blogPath('how-to-load')} className="text-white/80 underline-offset-2 hover:underline">
                         how to load
-                      </Link>{' '}
+                      </a>{' '}
                       before you inject.
                     </li>
                   </ol>
@@ -284,17 +225,17 @@ export function GameProductPage() {
                       The Isle on Steam
                     </a>
                     . For cheats, stay on {SITE_HOST}:{' '}
-                    <Link to="/reviews" className="text-white/80 underline-offset-2 hover:underline">
+                    <a href="/reviews" className="text-white/80 underline-offset-2 hover:underline">
                       reviews
-                    </Link>
+                    </a>
                     ,{' '}
-                    <Link to="/support" className="text-white/80 underline-offset-2 hover:underline">
+                    <a href="/support" className="text-white/80 underline-offset-2 hover:underline">
                       support
-                    </Link>
+                    </a>
                     , and{' '}
-                    <Link to="/articles" className="text-white/80 underline-offset-2 hover:underline">
+                    <a href="/articles" className="text-white/80 underline-offset-2 hover:underline">
                       blogs
-                    </Link>
+                    </a>
                     .
                   </p>
                 </div>
@@ -305,13 +246,13 @@ export function GameProductPage() {
                   </h2>
                   <p className="mt-3 text-sm leading-relaxed text-white/55">
                     Full answers live in the FAQ section below and on the{' '}
-                    <Link to="/faq" className="text-white/80 underline-offset-2 hover:underline">
+                    <a href="/faq" className="text-white/80 underline-offset-2 hover:underline">
                       The Isle Cheats FAQ
-                    </Link>{' '}
+                    </a>{' '}
                     page. For load issues open{' '}
-                    <Link to="/support" className="text-white/80 underline-offset-2 hover:underline">
+                    <a href="/support" className="text-white/80 underline-offset-2 hover:underline">
                       support
-                    </Link>
+                    </a>
                     .
                   </p>
                 </div>

@@ -1,40 +1,13 @@
-import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { Navbar } from '../components/Navbar'
 import { SiteFooter } from '../components/SiteFooter'
-import { FaqSection, faqPageJsonLd } from '../components/FaqSection'
+import { FaqSection } from '../components/FaqSection'
 import { SITE_FAQS } from '../data/faqs'
 import { guidePath } from '../data/games'
 import { OFFICIAL_ISLE_LINKS } from '../data/links'
 import { CheckoutLink } from '../components/CheckoutLink'
-import { SEO, SITE_HOST, SITE_NAME, SITE_URL } from '../data/site'
-import { usePageSeo } from '../lib/seo'
+import { SITE_HOST, SITE_NAME } from '../data/site'
 
 export function FaqPage() {
-  const jsonLd = useMemo(
-    () => ({
-      '@context': 'https://schema.org',
-      '@graph': [
-        faqPageJsonLd(SITE_FAQS, `${SITE_URL}/faq`),
-        {
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
-            {
-              '@type': 'ListItem',
-              position: 2,
-              name: 'FAQ',
-              item: `${SITE_URL}/faq`,
-            },
-          ],
-        },
-      ],
-    }),
-    [],
-  )
-
-  usePageSeo(SEO.faq, jsonLd)
-
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#0e0e0e] text-white">
       <div className="border-b border-white/10 bg-[#0e0e0e]/90 backdrop-blur-xl">
@@ -57,17 +30,17 @@ export function FaqPage() {
             </p>
             <p className="mt-3 text-sm text-white/45">
               Related:{' '}
-              <Link to={guidePath('isle')} className="text-white/75 underline-offset-2 hover:underline">
+              <a href={guidePath('isle')} className="text-white/75 underline-offset-2 hover:underline">
                 Buy The Isle Cheats
-              </Link>
+              </a>
               {' · '}
-              <Link to="/support" className="text-white/75 underline-offset-2 hover:underline">
+              <a href="/support" className="text-white/75 underline-offset-2 hover:underline">
                 Support
-              </Link>
+              </a>
               {' · '}
-              <Link to="/reviews" className="text-white/75 underline-offset-2 hover:underline">
+              <a href="/reviews" className="text-white/75 underline-offset-2 hover:underline">
                 Reviews
-              </Link>
+              </a>
               {' · '}
               <a
                 href={OFFICIAL_ISLE_LINKS[1].href}
@@ -100,12 +73,12 @@ export function FaqPage() {
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-              <Link
-                to="/support"
+              <a
+                href="/support"
                 className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white hover:bg-white/5"
               >
                 Support
-              </Link>
+              </a>
               <CheckoutLink className="cta-gradient inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white">
                 Buy The Isle Cheats
               </CheckoutLink>
@@ -118,4 +91,3 @@ export function FaqPage() {
     </div>
   )
 }
-

@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { Navbar } from '../components/Navbar'
 import { SiteFooter } from '../components/SiteFooter'
 import { HeroSearch } from '../components/HeroSearch'
@@ -35,18 +34,18 @@ export function NotFoundPage() {
             </div>
 
             <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-              <Link
-                to="/"
+              <a
+                href="/"
                 className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/5"
               >
                 Back home
-              </Link>
-              <Link
-                to="/articles"
+              </a>
+              <a
+                href="/articles"
                 className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/5"
               >
                 All articles
-              </Link>
+              </a>
               <CheckoutLink className="cta-gradient inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white">
                 Get
               </CheckoutLink>

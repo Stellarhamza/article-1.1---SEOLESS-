@@ -289,6 +289,4 @@ export function getBlog(slug: string) {
   return BLOGS.find((b) => b.slug === slug)
 }
 
-export function blogPath(slug: string) {
-  return `/blog/${slug}`
-}
+export { blogPath } from './blog-paths'

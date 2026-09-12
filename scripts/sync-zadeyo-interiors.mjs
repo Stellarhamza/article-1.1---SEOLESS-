@@ -93,7 +93,6 @@ function escapeTs(s) {
 
 async function main() {
   const { slugs: ourSlugs, normMap } = loadOurCatalog()
-  const ourSet = new Set(ourSlugs)
   const products = await fetchProducts()
 
   /** catalogSlug -> { url, kind, zadeyoSlug } — prefer cheat over stock */

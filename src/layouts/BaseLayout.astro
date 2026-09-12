@@ -1,0 +1,83 @@
+---
+import '../styles/global.css'
+import {
+  OG_IMAGE,
+  SEO_REGIONS,
+  SITE_NAME,
+  absoluteUrl,
+  type PageSeo,
+} from '../data/site'
+import { buildPageJsonLd } from '../lib/seo'
+
+type Props = {
+  seo: PageSeo
+  jsonLdExtra?: unknown[]
+  bodyClass?: string
+}
+
+const { seo, jsonLdExtra = [], bodyClass = 'bg-[#0e0e0e] text-white' } = Astro.props
+const url = absoluteUrl(seo.path)
+const image = seo.image || OG_IMAGE
+const robots =
+  seo.robots || 'index, follow, max-image-preview:large, max-snippet:-1'
+const jsonLd = buildPageJsonLd(seo, jsonLdExtra)
+const fontHref =
+  'https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Silkscreen:wght@400&display=swap'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0e0e0e" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://assets-prd.ignimgs.com" crossorigin />
+
+    <link rel="preload" as="style" href={fontHref} />
+    <link
+      rel="stylesheet"
+      href={fontHref}
+      media="print"
+      onload={"this.media='all'"}
+    />
+    <noscript>
+      <link rel="stylesheet" href={fontHref} />
+    </noscript>
+
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    {seo.keywords ? <meta name="keywords" content={seo.keywords} /> : null}
+    <meta name="robots" content={robots} />
+    <meta name="author" content={SITE_NAME} />
+    <link rel="canonical" href={url} />
+
+    {
+      SEO_REGIONS.map((region) => (
+        <link rel="alternate" hreflang={region.hreflang} href={url} />
+      ))
+    }
+
+    <meta property="og:type" content={seo.ogType || 'website'} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:alt" content={`${SITE_NAME} — The Isle Evrima cheats`} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={seo.title} />
+    <meta name="twitter:description" content={seo.description} />
+    <meta name="twitter:image" content={image} />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body class={bodyClass}>
+    <slot />
+  </body>
+</html>

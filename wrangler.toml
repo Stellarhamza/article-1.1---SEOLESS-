@@ -1,0 +1,5 @@
+# Optional local Wrangler config for Cloudflare Pages.
+# Dashboard deploy still works with: build = npm run build, output = dist
+name = "theislecheats"
+compatibility_date = "2026-09-12"
+pages_build_output_dir = "dist"

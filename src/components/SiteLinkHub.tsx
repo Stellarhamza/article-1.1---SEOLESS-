@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import {
   OFFICIAL_ISLE_LINKS,
   SITE_GUIDE_LINKS,
@@ -36,9 +35,9 @@ export function SiteLinkHub({ currentPath, variant = 'section' }: SiteLinkHubPro
           <ul className="mt-3 space-y-2 text-white/65">
             {pages.map((l) => (
               <li key={l.to}>
-                <Link to={l.to} className="hover:text-white">
+                <a href={l.to} className="hover:text-white">
                   {l.label}
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
@@ -50,9 +49,9 @@ export function SiteLinkHub({ currentPath, variant = 'section' }: SiteLinkHubPro
           <ul className="mt-3 space-y-2 text-white/65">
             {guides.map((l) => (
               <li key={l.to}>
-                <Link to={l.to} className="hover:text-white">
+                <a href={l.to} className="hover:text-white">
                   {l.label}
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
@@ -106,8 +105,8 @@ export function SiteLinkHub({ currentPath, variant = 'section' }: SiteLinkHubPro
             <ul className="mt-3 space-y-2.5">
               {pages.map((l) => (
                 <li key={l.to}>
-                  <Link
-                    to={l.to}
+                  <a
+                    href={l.to}
                     className="group block text-sm text-white/70 transition-colors hover:text-white"
                   >
                     <span className="font-medium underline-offset-2 group-hover:underline">
@@ -118,7 +117,7 @@ export function SiteLinkHub({ currentPath, variant = 'section' }: SiteLinkHubPro
                         {l.description}
                       </span>
                     ) : null}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -129,12 +128,12 @@ export function SiteLinkHub({ currentPath, variant = 'section' }: SiteLinkHubPro
             <ul className="mt-3 space-y-2.5">
               {guides.map((l) => (
                 <li key={l.to}>
-                  <Link
-                    to={l.to}
+                  <a
+                    href={l.to}
                     className="text-sm text-white/70 underline-offset-2 transition-colors hover:text-white hover:underline"
                   >
                     {l.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -171,4 +170,3 @@ export function SiteLinkHub({ currentPath, variant = 'section' }: SiteLinkHubPro
     </section>
   )
 }
-

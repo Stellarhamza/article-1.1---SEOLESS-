@@ -10,15 +10,44 @@ type LocalVideoStripProps = {
   startAt?: number
 }
 
+function prefersReducedMotion() {
+  return (
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
+}
+
 export function LocalVideoStrip({
   className = '',
   src = REVIEWS_VIDEO,
   startAt = START_AT,
 }: LocalVideoStripProps) {
+  const wrapRef = useRef<HTMLDivElement>(null)
   const ref = useRef<HTMLVideoElement>(null)
   const [ready, setReady] = useState(false)
+  const [active, setActive] = useState(false)
 
   useEffect(() => {
+    if (prefersReducedMotion()) return
+
+    const root = wrapRef.current
+    if (!root) return
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setActive(true)
+          io.disconnect()
+        }
+      },
+      { rootMargin: '200px 0px', threshold: 0.01 },
+    )
+    io.observe(root)
+    return () => io.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!active) return
     const video = ref.current
     if (!video) return
 
@@ -40,7 +69,6 @@ export function LocalVideoStrip({
         void video.play().then(reveal).catch(() => {})
       }
 
-      // If clip is shorter than startAt, play from 0
       const target = video.duration && video.duration > startAt ? startAt : 0
 
       if (Math.abs(video.currentTime - target) > 0.1) {
@@ -88,30 +116,32 @@ export function LocalVideoStrip({
       video.removeEventListener('playing', onPlaying)
       video.removeEventListener('ended', onEnded)
     }
-  }, [src, startAt])
+  }, [active, src, startAt])
 
   return (
     <div
+      ref={wrapRef}
       className={`video-strip relative w-full overflow-hidden pointer-events-none select-none ${className}`.trim()}
     >
       <div className="absolute inset-0 bg-[#0a0a0a]" />
-      <video
-        ref={ref}
-        className={`video-strip-local transition-opacity duration-500 ${
-          ready ? 'opacity-100' : 'opacity-0'
-        }`}
-        src={src}
-        muted
-        playsInline
-        autoPlay
-        loop
-        preload="metadata"
-        controls={false}
-        disablePictureInPicture
-        disableRemotePlayback
-        aria-hidden
-        tabIndex={-1}
-      />
+      {active ? (
+        <video
+          ref={ref}
+          className={`video-strip-local transition-opacity duration-500 ${
+            ready ? 'opacity-100' : 'opacity-0'
+          }`}
+          src={src}
+          muted
+          playsInline
+          loop
+          preload="none"
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
+          aria-hidden
+          tabIndex={-1}
+        />
+      ) : null}
     </div>
   )
 }

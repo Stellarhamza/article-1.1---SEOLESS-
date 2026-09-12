@@ -1,15 +1,23 @@
-import { Link, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { LogoMark } from './LogoMark'
 import { SiteLinkHub } from './SiteLinkHub'
 import { OFFICIAL_ISLE_LINKS, SITE_GUIDE_LINKS, SITE_PAGE_LINKS } from '../data/links'
 import { SITE_NAME, SITE_URL } from '../data/site'
 
-export function SiteFooter() {
-  const { pathname } = useLocation()
+type SiteFooterProps = {
+  currentPath?: string
+}
+
+export function SiteFooter({ currentPath }: SiteFooterProps) {
+  const [path, setPath] = useState(currentPath ?? '/')
+
+  useEffect(() => {
+    setPath(currentPath ?? window.location.pathname)
+  }, [currentPath])
 
   return (
     <>
-      <SiteLinkHub currentPath={pathname} />
+      <SiteLinkHub currentPath={path} />
 
       <footer className="page-x border-t border-white/10 bg-[#0a0a0a] py-12">
         <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -39,9 +47,9 @@ export function SiteFooter() {
             <ul className="mt-3 space-y-2 text-sm text-white/65">
               {SITE_PAGE_LINKS.map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} className="hover:text-white">
+                  <a href={l.to} className="hover:text-white">
                     {l.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -54,15 +62,15 @@ export function SiteFooter() {
             <ul className="mt-3 space-y-2 text-sm text-white/65">
               {SITE_GUIDE_LINKS.slice(0, 5).map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} className="hover:text-white">
+                  <a href={l.to} className="hover:text-white">
                     {l.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
               <li>
-                <Link to="/articles" className="hover:text-white">
+                <a href="/articles" className="hover:text-white">
                   All The Isle blogs →
-                </Link>
+                </a>
               </li>
             </ul>
           </div>

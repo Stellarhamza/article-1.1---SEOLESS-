@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { Navbar } from '../components/Navbar'
 import { SiteFooter } from '../components/SiteFooter'
@@ -7,19 +6,17 @@ import { VideoBg } from '../components/VideoBg'
 import { HeroSearch } from '../components/HeroSearch'
 import { BLOGS, blogPath } from '../data/blogs'
 import { guidePath } from '../data/games'
-import { SEO, SITE_HOST } from '../data/site'
-import { usePageSeo } from '../lib/seo'
+import { SITE_HOST } from '../data/site'
 
-export function ArticlesPage() {
-  const [params, setParams] = useSearchParams()
-  const [q, setQ] = useState(() => params.get('q') ?? '')
+type ArticlesPageProps = {
+  initialQuery?: string
+}
 
-  usePageSeo(SEO.articles)
+export function ArticlesPage({ initialQuery = '' }: ArticlesPageProps) {
+  const [q, setQ] = useState(() => initialQuery)
 
   function onSearchChange(next: string) {
     setQ(next)
-    if (next.trim()) setParams({ q: next }, { replace: true })
-    else setParams({}, { replace: true })
   }
 
   const filtered = useMemo(() => {
@@ -76,12 +73,12 @@ export function ArticlesPage() {
                   checkout.
                 </p>
               </div>
-              <Link
-                to={guidePath('isle')}
+              <a
+                href={guidePath('isle')}
                 className="cta-gradient inline-flex shrink-0 items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white"
               >
                 Open product
-              </Link>
+              </a>
             </div>
 
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -109,9 +106,9 @@ export function ArticlesPage() {
             ) : (
               <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {filtered.map((post) => (
-                  <Link
+                  <a
                     key={post.slug}
-                    to={blogPath(post.slug)}
+                    href={blogPath(post.slug)}
                     className="page-card group flex h-full flex-col rounded-2xl p-5 sm:p-6"
                   >
                     <div className="flex items-center justify-between gap-2">
@@ -133,7 +130,7 @@ export function ArticlesPage() {
                         strokeWidth={1.75}
                       />
                     </span>
-                  </Link>
+                  </a>
                 ))}
               </div>
             )}

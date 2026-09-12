@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { LogoMark } from './LogoMark'
 import { CheckoutLink } from './CheckoutLink'
@@ -32,23 +31,23 @@ export function Navbar({ onVideo: _onVideo = false }: NavbarProps) {
   return (
     <>
       <nav className="page-x relative z-20 flex items-center justify-between gap-3 py-4 sm:py-6">
-        <Link to="/" className="flex min-w-0 items-center gap-2">
+        <a href="/" className="flex min-w-0 items-center gap-2">
           <LogoMark className={`${brandClass} shrink-0`} />
           <span className={`truncate text-base font-semibold sm:text-lg ${brandClass}`}>
             {SITE_NAME}
           </span>
-        </Link>
+        </a>
 
         <div className="hidden items-center gap-3 md:flex">
           <div className="flex items-center gap-1 rounded-full bg-white/10 px-1.5 py-1.5 backdrop-blur-lg">
             {NAV_LINKS.map((link) => (
-              <Link
+              <a
                 key={link.label}
-                to={link.to}
+                href={link.to}
                 className="inline-flex items-center gap-1 rounded-full px-4 py-1.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
           </div>
           <CheckoutLink className="cta-gradient flex items-center self-stretch rounded-full px-5 text-sm font-medium text-white transition-opacity hover:opacity-90">
@@ -88,9 +87,9 @@ export function Navbar({ onVideo: _onVideo = false }: NavbarProps) {
       >
         <div className="flex flex-col gap-2 px-6 pt-24">
           {NAV_LINKS.map((link, index) => (
-            <Link
+            <a
               key={link.label}
-              to={link.to}
+              href={link.to}
               onClick={() => setMenuOpen(false)}
               className="rounded-xl px-4 py-3.5 text-base font-medium text-white/80 transition-all hover:bg-white/10 hover:text-white"
               style={{
@@ -100,7 +99,7 @@ export function Navbar({ onVideo: _onVideo = false }: NavbarProps) {
               }}
             >
               {link.label}
-            </Link>
+            </a>
           ))}
         </div>
         <div className="mt-auto px-6 pb-[max(2.5rem,env(safe-area-inset-bottom))]">

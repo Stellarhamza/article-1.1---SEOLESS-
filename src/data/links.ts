@@ -1,4 +1,4 @@
-import { blogPath } from './blogs'
+import { blogPath } from './blog-paths'
 
 /** Official The Isle game destinations (authority / topical relevance). */
 export const OFFICIAL_ISLE_LINKS = [

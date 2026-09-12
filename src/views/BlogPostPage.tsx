@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { Navbar } from '../components/Navbar'
 import { SiteFooter } from '../components/SiteFooter'
@@ -7,58 +5,15 @@ import { BLOGS, blogPath, getBlog } from '../data/blogs'
 import { guidePath } from '../data/games'
 import { getGameImage, IMAGE_SEO } from '../data/images'
 import { CheckoutLink } from '../components/CheckoutLink'
-import { SITE_HOST, SITE_NAME, SITE_URL } from '../data/site'
-import { usePageSeo } from '../lib/seo'
+import { SITE_HOST } from '../data/site'
 import { NotFoundPage } from './NotFoundPage'
 
-export function BlogPostPage() {
-  const { slug = '' } = useParams()
+type BlogPostPageProps = {
+  slug: string
+}
+
+export function BlogPostPage({ slug }: BlogPostPageProps) {
   const post = getBlog(slug)
-
-  const seo = useMemo(() => {
-    if (!post) {
-      return {
-        title: `Post Not Found | ${SITE_NAME}`,
-        description: `This The Isle Cheats blog post was not found on ${SITE_HOST}.`,
-        path: '/articles',
-        keywords: 'The Isle Cheats, the isle cheats blogs',
-      }
-    }
-    return {
-      title: post.metaTitle,
-      description: post.metaDescription,
-      path: blogPath(post.slug),
-      keywords: post.keywords,
-      ogType: 'article' as const,
-      image: getGameImage('isle'),
-      robots: 'index, follow, max-image-preview:large, max-snippet:-1',
-    }
-  }, [post])
-
-  const jsonLd = useMemo(() => {
-    if (!post) return undefined
-    return {
-      '@type': 'BlogPosting',
-      headline: post.title,
-      description: post.metaDescription,
-      datePublished: post.date,
-      dateModified: post.date,
-      author: { '@type': 'Organization', name: SITE_NAME },
-      publisher: {
-        '@type': 'Organization',
-        name: SITE_NAME,
-        url: SITE_URL,
-        logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
-      },
-      mainEntityOfPage: `${SITE_URL}${blogPath(post.slug)}`,
-      keywords: post.keywords,
-      image: getGameImage('isle'),
-      inLanguage: ['en', 'en-US', 'en-GB', 'en-AU', 'en-CA'],
-      articleSection: post.tag,
-    }
-  }, [post])
-
-  usePageSeo(seo, jsonLd)
 
   if (!post) return <NotFoundPage />
 
@@ -77,13 +32,13 @@ export function BlogPostPage() {
               className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-white/40"
               aria-label="Breadcrumb"
             >
-              <Link to="/" className="hover:text-white/70">
+              <a href="/" className="hover:text-white/70">
                 Home
-              </Link>
+              </a>
               <span>/</span>
-              <Link to="/articles" className="hover:text-white/70">
+              <a href="/articles" className="hover:text-white/70">
                 Blogs
-              </Link>
+              </a>
               <span>/</span>
               <span className="text-white/70">{post.tag}</span>
             </nav>
@@ -104,9 +59,10 @@ export function BlogPostPage() {
                 alt={`${post.title} — The Isle Cheats IGN image for ${post.keywords.split(',')[0].trim()}`}
                 title={IMAGE_SEO.isle?.title ?? 'The Isle Cheats'}
                 width={800}
-                height={1200}
+                height={450}
                 loading="eager"
                 decoding="async"
+                fetchPriority="high"
                 referrerPolicy="no-referrer"
                 className="game-cover-img aspect-[3/4] w-full object-cover object-center sm:aspect-[16/10]"
               />
@@ -137,13 +93,13 @@ export function BlogPostPage() {
               <p className="mt-2 text-sm leading-relaxed text-white/55">
                 Check live Undetected status, then buy ESP, wallhack, and spoofer for
                 Evrima on {SITE_HOST}. Need help? Read{' '}
-                <Link to="/support" className="text-white/80 underline-offset-2 hover:underline">
+                <a href="/support" className="text-white/80 underline-offset-2 hover:underline">
                   The Isle Cheats support
-                </Link>
+                </a>
                 {' '}or{' '}
-                <Link to="/reviews" className="text-white/80 underline-offset-2 hover:underline">
+                <a href="/reviews" className="text-white/80 underline-offset-2 hover:underline">
                   player reviews
-                </Link>
+                </a>
                 . Own the game via{' '}
                 <a
                   href="https://store.steampowered.com/app/376210/The_Isle/"
@@ -156,31 +112,31 @@ export function BlogPostPage() {
                 .
               </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <Link
-                  to={guidePath('isle')}
+                <a
+                  href={guidePath('isle')}
                   className="inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white hover:bg-white/5"
                 >
                   Open product
-                </Link>
-                <Link
-                  to="/support"
+                </a>
+                <a
+                  href="/support"
                   className="inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white hover:bg-white/5"
                 >
                   Support
-                </Link>
+                </a>
                 <CheckoutLink className="cta-gradient inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium text-white">
                   Buy The Isle Cheats
                 </CheckoutLink>
               </div>
             </div>
 
-            <Link
-              to="/articles"
+            <a
+              href="/articles"
               className="mt-10 inline-flex items-center gap-1.5 text-sm text-white/55 hover:text-white"
             >
               <ArrowLeft className="h-4 w-4" strokeWidth={1.75} />
               All The Isle blogs
-            </Link>
+            </a>
           </div>
         </article>
 
@@ -192,9 +148,9 @@ export function BlogPostPage() {
               </h2>
               <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {related.map((b) => (
-                  <Link
+                  <a
                     key={b.slug}
-                    to={blogPath(b.slug)}
+                    href={blogPath(b.slug)}
                     className="page-card group flex h-full flex-col rounded-2xl p-5"
                   >
                     <p className="text-xs uppercase tracking-wider text-white/40">{b.tag}</p>
@@ -208,7 +164,7 @@ export function BlogPostPage() {
                       Read
                       <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.75} />
                     </span>
-                  </Link>
+                  </a>
                 ))}
               </div>
             </div>

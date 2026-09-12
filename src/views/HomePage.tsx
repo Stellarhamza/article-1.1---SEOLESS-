@@ -1,17 +1,14 @@
-import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { ArrowRight, Crosshair, Eye, Shield, Sparkles } from 'lucide-react'
 import { Navbar } from '../components/Navbar'
 import { VideoBg } from '../components/VideoBg'
 import { LocalVideoStrip } from '../components/LocalVideoStrip'
 import { SiteFooter } from '../components/SiteFooter'
 import { HeroSearch } from '../components/HeroSearch'
-import { FaqSection, faqPageJsonLd } from '../components/FaqSection'
+import { FaqSection } from '../components/FaqSection'
 import { guidePath } from '../data/games'
 import { CheckoutLink } from '../components/CheckoutLink'
 import { HOME_FAQS } from '../data/faqs'
-import { HOME_HEADINGS, SEO, SITE_HOST, SITE_NAME, SITE_PURPOSE, SITE_URL } from '../data/site'
-import { usePageSeo } from '../lib/seo'
+import { HOME_HEADINGS, SITE_HOST, SITE_NAME, SITE_PURPOSE } from '../data/site'
 import { BLOGS, blogPath } from '../data/blogs'
 
 const FEATURES = [
@@ -38,16 +35,6 @@ const FEATURES = [
 ] as const
 
 export function HomePage() {
-  const jsonLd = useMemo(
-    () => ({
-      '@context': 'https://schema.org',
-      '@graph': [faqPageJsonLd(HOME_FAQS, `${SITE_URL}/`)],
-    }),
-    [],
-  )
-
-  usePageSeo(SEO.home, jsonLd)
-
   return (
     <div className="min-h-screen overflow-x-hidden text-white">
       <section id="home" className="relative flex min-h-screen flex-col overflow-x-clip">
@@ -162,20 +149,20 @@ export function HomePage() {
                   ESP, wallhack, undetected status, spoofer, and buyer guides for Evrima.
                 </p>
               </div>
-              <Link
-                to="/articles"
+              <a
+                href="/articles"
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-white/80 hover:text-white"
               >
                 All blogs
                 <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
-              </Link>
+              </a>
             </div>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {BLOGS.slice(0, 3).map((post) => (
-                <Link
+                <a
                   key={post.slug}
-                  to={blogPath(post.slug)}
+                  href={blogPath(post.slug)}
                   className="page-card group flex h-full flex-col rounded-2xl p-5 sm:p-6"
                 >
                   <p className="text-xs uppercase tracking-wider text-white/45">{post.tag}</p>
@@ -192,7 +179,7 @@ export function HomePage() {
                       strokeWidth={1.75}
                     />
                   </span>
-                </Link>
+                </a>
               ))}
             </div>
 
@@ -203,12 +190,12 @@ export function HomePage() {
                   Live Undetected status · ESP · wallhack · spoofer
                 </p>
               </div>
-              <Link
-                to={guidePath('isle')}
+              <a
+                href={guidePath('isle')}
                 className="cta-gradient inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white"
               >
                 Open The Isle Cheats
-              </Link>
+              </a>
             </div>
           </div>
         </section>
@@ -244,36 +231,36 @@ export function HomePage() {
                     Steam
                   </a>
                   — then use{' '}
-                  <Link
-                    to="/isle-cheats"
+                  <a
+                    href="/isle-cheats"
                     className="text-white/80 underline-offset-2 hover:underline"
                   >
                     The Isle Cheats
-                  </Link>
+                  </a>
                   ,{' '}
-                  <Link
-                    to="/reviews"
+                  <a
+                    href="/reviews"
                     className="text-white/80 underline-offset-2 hover:underline"
                   >
                     reviews
-                  </Link>
+                  </a>
                   , or{' '}
-                  <Link
-                    to="/support"
+                  <a
+                    href="/support"
                     className="text-white/80 underline-offset-2 hover:underline"
                   >
                     support
-                  </Link>
+                  </a>
                   .
                 </p>
               </div>
-              <Link
-                to={guidePath('isle')}
+              <a
+                href={guidePath('isle')}
                 className="mt-8 inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-white hover:text-white/80"
               >
                 Read the full guide
                 <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
-              </Link>
+              </a>
             </div>
 
             <div
@@ -308,13 +295,13 @@ export function HomePage() {
 
         <div className="page-x pb-10">
           <div className="mx-auto max-w-6xl">
-            <Link
-              to="/faq"
+            <a
+              href="/faq"
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-white hover:text-white/80"
             >
               View all The Isle Cheats FAQ
               <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
-            </Link>
+            </a>
           </div>
         </div>
 

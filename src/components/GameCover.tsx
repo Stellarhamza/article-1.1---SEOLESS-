@@ -10,6 +10,8 @@ type GameCoverProps = {
   fill?: boolean
   /** Product page: use interior art and show full color */
   variant?: 'catalog' | 'product'
+  /** Above-the-fold hero — eager load + high fetch priority */
+  priority?: boolean
 }
 
 function candidatesFor(url: string): string[] {
@@ -17,22 +19,9 @@ function candidatesFor(url: string): string[] {
   const push = (u: string) => {
     if (u && !out.includes(u)) out.push(u)
   }
-
-  const proxyHosts =
-    /^(https:\/\/)(assets(-prd|[0-9]*)?\.ignimgs\.com|cdn\.cloudflare\.steamstatic\.com|shared\.akamai\.steamstatic\.com|wh-satano\.ru|images\.igdb\.com)\//i
-
-  if (proxyHosts.test(url)) {
-    push(`/api/ign?u=${encodeURIComponent(url)}`)
-    push(url)
-    const bare = url.split('?')[0]
-    if (bare !== url) {
-      push(`/api/ign?u=${encodeURIComponent(bare)}`)
-      push(bare)
-    }
-  } else {
-    push(url)
-  }
-
+  push(url)
+  const bare = url.split('?')[0]
+  if (bare !== url) push(bare)
   return out
 }
 
@@ -43,6 +32,7 @@ export function GameCover({
   aspect = 'video',
   fill = false,
   variant = 'catalog',
+  priority = false,
 }: GameCoverProps) {
   const sources = useMemo(
     () =>
@@ -57,7 +47,7 @@ export function GameCover({
   useEffect(() => {
     setIndex(0)
     setFailed(false)
-  }, [slug])
+  }, [slug, variant])
 
   const src = sources[index]
   const ratio = fill
@@ -68,6 +58,8 @@ export function GameCover({
         ? 'aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9]'
         : 'aspect-[16/10]'
 
+  const eager = priority || variant === 'product'
+
   return (
     <div className={`relative overflow-hidden bg-[#121212] ${ratio} ${className}`}>
       {!failed && src ? (
@@ -76,11 +68,14 @@ export function GameCover({
           src={src}
           alt={getImageAlt(slug, name, variant)}
           title={getImageTitle(slug, name, variant)}
-          loading="lazy"
-          decoding="async"
+          width={1440}
+          height={810}
+          loading={eager ? 'eager' : 'lazy'}
+          decoding={eager ? 'sync' : 'async'}
+          fetchPriority={eager ? 'high' : 'auto'}
           referrerPolicy="no-referrer"
           sizes={
-            aspect === 'hero'
+            aspect === 'hero' || variant === 'product'
               ? '100vw'
               : fill
                 ? '(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 16vw'

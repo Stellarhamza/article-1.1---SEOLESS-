@@ -1,6 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import type { FormEvent, KeyboardEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import type { KeyboardEvent, SyntheticEvent } from 'react'
 import { ArrowRight, Search } from 'lucide-react'
 import { GAMES, guidePath } from '../data/games'
 
@@ -23,7 +22,6 @@ export function HeroSearch({
   autoFocus = false,
   className = '',
 }: HeroSearchProps) {
-  const navigate = useNavigate()
   const listId = useId()
   const rootRef = useRef<HTMLDivElement>(null)
   const [internal, setInternal] = useState(value ?? '')
@@ -61,10 +59,10 @@ export function HeroSearch({
 
   function goToGame(slug: string) {
     setOpen(false)
-    navigate(guidePath(slug))
+    window.location.assign(guidePath(slug))
   }
 
-  function submit(e?: FormEvent) {
+  function submit(e?: SyntheticEvent) {
     e?.preventDefault()
     const term = q.trim()
     const exact = GAMES.find(
@@ -82,7 +80,7 @@ export function HeroSearch({
     }
     if (submitTo === 'articles') {
       setOpen(false)
-      navigate(term ? `/articles?q=${encodeURIComponent(term)}` : '/articles')
+      window.location.assign(term ? `/articles?q=${encodeURIComponent(term)}` : '/articles')
       return
     }
     setOpen(false)

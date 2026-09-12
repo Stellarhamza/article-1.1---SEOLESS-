@@ -1,53 +1,12 @@
-import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { Navbar } from '../components/Navbar'
 import { SiteFooter } from '../components/SiteFooter'
-import { FaqSection, faqPageJsonLd } from '../components/FaqSection'
+import { FaqSection } from '../components/FaqSection'
 import { CheckoutLink } from '../components/CheckoutLink'
 import { guidePath } from '../data/games'
-import { SEO, SITE_HOST, SITE_NAME, SITE_PURPOSE, SITE_URL } from '../data/site'
+import { SITE_HOST, SITE_NAME } from '../data/site'
 import { SUPPORT_FAQS, SUPPORT_INTRO, SUPPORT_TOPICS } from '../data/support'
-import { usePageSeo } from '../lib/seo'
 
 export function SupportPage() {
-  const jsonLd = useMemo(
-    () => ({
-      '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'ContactPage',
-          '@id': `${SITE_URL}/support#contactpage`,
-          url: `${SITE_URL}/support`,
-          name: SEO.support.title,
-          description: SEO.support.description,
-          about: {
-            '@type': 'Thing',
-            name: SITE_NAME,
-            description: SITE_PURPOSE,
-          },
-          inLanguage: 'en',
-          isPartOf: { '@id': `${SITE_URL}/#website` },
-        },
-        faqPageJsonLd(SUPPORT_FAQS, `${SITE_URL}/support`),
-        {
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
-            {
-              '@type': 'ListItem',
-              position: 2,
-              name: 'Support',
-              item: `${SITE_URL}/support`,
-            },
-          ],
-        },
-      ],
-    }),
-    [],
-  )
-
-  usePageSeo(SEO.support, jsonLd)
-
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#0e0e0e] text-white">
       <div className="border-b border-white/10 bg-[#0e0e0e]/90 backdrop-blur-xl">
@@ -83,21 +42,21 @@ export function SupportPage() {
                 Steam
               </a>
               . Product help stays on{' '}
-              <Link to="/isle-cheats" className="text-white/80 underline-offset-2 hover:underline">
+              <a href="/isle-cheats" className="text-white/80 underline-offset-2 hover:underline">
                 Buy The Isle Cheats
-              </Link>
+              </a>
               ,{' '}
-              <Link to="/articles" className="text-white/80 underline-offset-2 hover:underline">
+              <a href="/articles" className="text-white/80 underline-offset-2 hover:underline">
                 blogs
-              </Link>
+              </a>
               , and{' '}
-              <Link to="/reviews" className="text-white/80 underline-offset-2 hover:underline">
+              <a href="/reviews" className="text-white/80 underline-offset-2 hover:underline">
                 reviews
-              </Link>
+              </a>
               , and the{' '}
-              <Link to="/faq" className="text-white/80 underline-offset-2 hover:underline">
+              <a href="/faq" className="text-white/80 underline-offset-2 hover:underline">
                 full FAQ
-              </Link>
+              </a>
               .
             </p>
           </div>
@@ -142,12 +101,12 @@ export function SupportPage() {
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-              <Link
-                to={guidePath('isle')}
+              <a
+                href={guidePath('isle')}
                 className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/5"
               >
                 Open The Isle Cheats
-              </Link>
+              </a>
               <CheckoutLink className="cta-gradient inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white">
                 Buy The Isle Cheats
               </CheckoutLink>
@@ -183,4 +142,3 @@ export function SupportPage() {
     </div>
   )
 }
-

@@ -85,20 +85,4 @@ export function FaqSection({
     </section>
   )
 }
-
-/** Build FAQPage JSON-LD graph node from the same items shown in FaqSection. */
-export function faqPageJsonLd(items: FaqItem[], pageUrl?: string) {
-  return {
-    '@type': 'FAQPage',
-    ...(pageUrl ? { '@id': `${pageUrl}#faq`, url: pageUrl } : {}),
-    mainEntity: items.map((item) => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.a,
-      },
-    })),
-  }
-}
 

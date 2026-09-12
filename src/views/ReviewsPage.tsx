@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { Star } from 'lucide-react'
 import { Navbar } from '../components/Navbar'
 import { SiteFooter } from '../components/SiteFooter'
@@ -7,7 +5,6 @@ import { LocalVideoStrip } from '../components/LocalVideoStrip'
 import { getReviewsAggregate, REVIEWS } from '../data/reviews'
 import { CheckoutLink } from '../components/CheckoutLink'
 import { SEO, SITE_NAME, SITE_PURPOSE, SITE_URL } from '../data/site'
-import { usePageSeo } from '../lib/seo'
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -25,72 +22,6 @@ function Stars({ rating }: { rating: number }) {
 
 export function ReviewsPage() {
   const aggregate = getReviewsAggregate()
-
-  const jsonLd = useMemo(() => {
-    const agg = getReviewsAggregate()
-    return {
-      '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'Product',
-          '@id': `${SITE_URL}/isle-cheats#product`,
-          name: 'The Isle Cheats',
-          description: SITE_PURPOSE,
-          brand: { '@type': 'Brand', name: SITE_NAME },
-          url: `${SITE_URL}/isle-cheats`,
-          category: 'The Isle Evrima Cheats',
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: agg.ratingValue,
-            reviewCount: agg.reviewCount,
-            bestRating: agg.bestRating,
-            worstRating: agg.worstRating,
-          },
-          review: REVIEWS.map((r) => ({
-            '@type': 'Review',
-            author: { '@type': 'Person', name: r.author },
-            datePublished: r.datePublished,
-            reviewBody: r.body,
-            name: `${r.author} The Isle Cheats review`,
-            reviewRating: {
-              '@type': 'Rating',
-              ratingValue: String(r.rating),
-              bestRating: '5',
-              worstRating: '1',
-            },
-            itemReviewed: {
-              '@type': 'Product',
-              name: 'The Isle Cheats',
-              url: `${SITE_URL}/isle-cheats`,
-            },
-          })),
-        },
-        {
-          '@type': 'CollectionPage',
-          '@id': `${SITE_URL}/reviews#webpage`,
-          url: `${SITE_URL}/reviews`,
-          name: SEO.reviews.title,
-          description: SEO.reviews.description,
-          about: { '@id': `${SITE_URL}/isle-cheats#product` },
-          inLanguage: 'en',
-        },
-        {
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
-            {
-              '@type': 'ListItem',
-              position: 2,
-              name: 'Reviews',
-              item: `${SITE_URL}/reviews`,
-            },
-          ],
-        },
-      ],
-    }
-  }, [])
-
-  usePageSeo(SEO.reviews, jsonLd)
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#0e0e0e] text-white">
@@ -115,17 +46,17 @@ export function ReviewsPage() {
               wallhack, the isle radar, Undetected vs EAC honesty, HWID spoofer notes, and whether
               private the isle cheats builds held after the last patch on theislecheats.cc. Read
               the{' '}
-              <Link to="/isle-cheats" className="text-white/80 underline-offset-2 hover:underline">
+              <a href="/isle-cheats" className="text-white/80 underline-offset-2 hover:underline">
                 product page
-              </Link>
+              </a>
               ,{' '}
-              <Link to="/support" className="text-white/80 underline-offset-2 hover:underline">
+              <a href="/support" className="text-white/80 underline-offset-2 hover:underline">
                 support
-              </Link>
+              </a>
               , or{' '}
-              <Link to="/articles" className="text-white/80 underline-offset-2 hover:underline">
+              <a href="/articles" className="text-white/80 underline-offset-2 hover:underline">
                 blogs
-              </Link>
+              </a>
               . Play The Isle via{' '}
               <a
                 href="https://store.steampowered.com/app/376210/The_Isle/"
@@ -248,19 +179,19 @@ export function ReviewsPage() {
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-white/55">
                 Open the guide, confirm Undetected status, then checkout — or visit{' '}
-                <Link to="/support" className="text-white underline-offset-2 hover:underline">
+                <a href="/support" className="text-white underline-offset-2 hover:underline">
                   The Isle Cheats support
-                </Link>{' '}
+                </a>{' '}
                 for load and inject help.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-              <Link
-                to="/isle-cheats"
+              <a
+                href="/isle-cheats"
                 className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/5"
               >
                 Open The Isle Cheats
-              </Link>
+              </a>
               <CheckoutLink className="cta-gradient inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-white">
                 Buy now
               </CheckoutLink>
@@ -290,4 +221,3 @@ export function ReviewsPage() {
     </div>
   )
 }
-

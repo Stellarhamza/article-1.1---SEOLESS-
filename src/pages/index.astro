@@ -1,0 +1,14 @@
+﻿---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { HomePage } from '../views/HomePage'
+import { SEO, SITE_URL } from '../data/site'
+import { HOME_FAQS } from '../data/faqs'
+import { faqPageJsonLd } from '../lib/seo'
+---
+
+<BaseLayout
+  seo={SEO.home}
+  jsonLdExtra={[faqPageJsonLd(HOME_FAQS, `${SITE_URL}/`)]}
+>
+  <HomePage client:idle />
+</BaseLayout>

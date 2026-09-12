@@ -1,32 +1,34 @@
-# React + TypeScript + Vite
+# The Isle Cheats (theislecheats.cc)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Static Astro site for The Isle (Evrima) cheats — Cloudflare Pages ready.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Astro 5 (static output)
+- React islands (`@astrojs/react`)
+- Tailwind CSS
+- Custom split sitemaps (`npm run generate:sitemaps`)
 
-## React Compiler
+## Scripts
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Local dev on port 5174 |
+| `npm run build` | Generate sitemaps + `astro build` → `dist/` |
+| `npm run preview` | Preview production build |
+| `npm run check` | Astro + TypeScript diagnostics |
+| `npm run lint` | Oxlint |
 
-## Expanding the Oxlint configuration
+## Cloudflare Pages
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- **Build command:** `npm run build`
+- **Output directory:** `dist`
+- **Node version:** 22 (or latest LTS)
+- **Framework preset:** None / Astro (static)
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+Deploy artifacts include:
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+- `public/_headers` → cache + security headers (`/_astro/*` immutable)
+- `public/_redirects` → unknown paths serve `404.html` with status 404
+
+No Cloudflare adapter is required for static Pages hosting.
